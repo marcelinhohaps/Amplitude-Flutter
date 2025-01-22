@@ -2,19 +2,18 @@ group 'com.amplitude.amplitude_flutter'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.9.22' // Atualize para uma versão compatível com AGP 8.0+
     repositories {
         google()
         mavenCentral()
     }
-
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.4'
+        classpath 'com.android.tools.build:gradle:8.2.0' // Atualize para AGP mais recente
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-rootProject.allprojects {
+allprojects {
     repositories {
         google()
         mavenCentral()
@@ -25,28 +24,30 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
-    // Condition for namespace compatibility in AGP 8
-    if (project.android.hasProperty("namespace")) {
-        namespace 'com.amplitude.amplitude_flutter'
+    compileSdkVersion 34 // Use a mesma versão do aplicativo principal
+    namespace 'com.amplitude.amplitude_flutter'
+
+    defaultConfig {
+        minSdkVersion 23 // Alinhe com a minSdkVersion do aplicativo principal
+        targetSdkVersion 34
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-    defaultConfig {
-        minSdkVersion 16
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
+
     lintOptions {
         disable 'InvalidPackage'
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
 }
+
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version" // Atualizado para jdk8
     implementation "com.amplitude:android-sdk:2.39.8"
     implementation "com.squareup.okhttp3:okhttp:4.2.2"
 }
